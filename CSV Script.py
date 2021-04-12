@@ -95,10 +95,10 @@ for line in tqdm(names):
     except wikipedia.DisambiguationError as e:
         # print('cant disambiguate', line)
         # print(e.options)
-         fails.append((line, name_to_handle[line])
+        fails.append((line, name_to_handle[line]))
     except wikipedia.PageError:
         # print('cant find', line)
-        fails.append((line, name_to_handle[line])
+        fails.append((line, name_to_handle[line]))
 
 
 infobox_data = []
@@ -118,7 +118,7 @@ parsed_infobox_data = []
 infobox_fields = ['birth_date', 'name']
 for name, u in infobox_data:
     
-    dat = {"name" : name.strip()}
+    dat = {"name" : name}
     if 'infobox' in u.data and u.data['infobox']:
         for x in infobox_fields:
             dat[x] = u.data['infobox'].get(x, '')
@@ -130,9 +130,6 @@ for name, u in infobox_data:
 
 
 infoboxes = pd.DataFrame(parsed_infobox_data)
-# handles = pd.DataFrame(twitter_handles, columns=['name','twitter'])
-# all_wiki = pd.merge(infoboxes,handles, on="name",how="inner")
-# all_wiki.to_csv("twitter_age.csv",encoding="utf8")
 infoboxes.to_csv("wiki_data.csv",encoding="utf8")
 failed = pd.DataFrame(fails)
 failed.to_csv("failed.csv", encoding="utf8")
