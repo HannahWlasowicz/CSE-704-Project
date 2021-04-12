@@ -95,10 +95,10 @@ for line in tqdm(names):
     except wikipedia.DisambiguationError as e:
         # print('cant disambiguate', line)
         # print(e.options)
-        fails.append(line)
+         fails.append((line, name_to_handle[line])
     except wikipedia.PageError:
         # print('cant find', line)
-        fails.append(line)
+        fails.append((line, name_to_handle[line])
 
 
 infobox_data = []
