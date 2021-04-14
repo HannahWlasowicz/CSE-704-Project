@@ -25,11 +25,27 @@ for val in retVal:
     birthday = birthday.replace('}', '')
     birth_data = birthday.split('|')
     if len(birth_data) > 0:
-        if len(birth_data) > 4 or len(birth_data) <4:
+        if len(birth_data) > 4:
             # Parse out stuff
             print(birth_data)
-        else:
+            if len(birth_data[1]) != 4:
+                # at end
+                birth_year = int(birth_data[4])
+                birth_month = int(birth_data[5])
+                birth_day =  int(birth_data[6])
+            else:
+                birth_year = int(birth_data[1])
+                birth_month = int(birth_data[2])
+                birth_day =  int(birth_data[3])
+            today = date.today()
+            age = today.year - birth_year - ((today.month, today.day) < (birth_month, birth_day))
+            val["bday"] = age
+
+        elif len(birth_data) < 4:
+            # why
+            val["bday"] = 00
             print(birth_data)
+        else:
             birth_year = int(birth_data[1])
             birth_month = int(birth_data[2])
             birth_day =  int(birth_data[3])
