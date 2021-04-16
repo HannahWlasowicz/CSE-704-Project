@@ -16,7 +16,7 @@ retVal = {}
 
 
 #Read from CSV with utf8 encoding
-with open("new_celebs.csv", mode='r', encoding="utf-8") as csvfile:
+with open("csv/new_celebs.csv", mode='r', encoding="utf-8") as csvfile:
     reader = csv.reader(csvfile, delimiter = ',')
     line_count = 0
     for row in reader:
@@ -130,6 +130,6 @@ for name, u in infobox_data:
 
 
 infoboxes = pd.DataFrame(parsed_infobox_data)
-infoboxes.to_csv("wiki_data.csv",encoding="utf8")
+infoboxes.to_csv("csv/wiki_data.csv",encoding="utf8")
 failed = pd.DataFrame(fails)
-failed.to_csv("failed.csv", encoding="utf8")
+failed.to_csv("csv/failed.csv", encoding="utf8")

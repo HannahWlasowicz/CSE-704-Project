@@ -4,7 +4,7 @@ import re
 from datetime import date
 
 retVal = []
-with open("wiki_data.csv", mode='r', encoding="utf-8") as csvfile:
+with open("csv/wiki_data.csv", mode='r', encoding="utf-8") as csvfile:
     reader = csv.reader(csvfile, delimiter = ',')
     
     line_count = 0
@@ -54,7 +54,7 @@ for val in retVal:
             val["bday"] = age
 
 
-with open('updated_wiki_data.csv', mode='w', encoding="utf-8") as employee_file:
+with open('csv/updated_wiki_data.csv', mode='w', encoding="utf-8") as employee_file:
     writer = csv.writer(employee_file, delimiter=',')
     for val in retVal:
         writer.writerow([val["name"],val["bday"], val["twitter"] ])
