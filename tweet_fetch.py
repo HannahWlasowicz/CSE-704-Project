@@ -1,6 +1,8 @@
 import csv
 import twitter
 import json
+from langdetect import detect
+from textblob import TextBlob
 import re
 from collections import defaultdict
 
@@ -30,22 +32,37 @@ twitter_api = twitter.Api(consumer_key=file_json["API_KEY"],
                   access_token_key=file_json["ACCESS_TOKEN"],
                   access_token_secret=file_json["ACCESS_TOKEN_SECRET"])
 
+
+age_dict = dict()
+with open("csv/updated_wiki_data.csv", mode='r') as wiki_csv:
+    reader = csv.reader(wiki_csv, delimiter=',')
+    for row in reader:
+        age = row[1]
+        handle = row[2]
+        age_dict[handle] = age
+
 word_dict = dict()
-with open("top-1000-celebs.csv", mode='r',) as csvfile:
+with open("csv/wiki_data.csv", mode='r',) as csvfile:
     reader = csv.reader(csvfile, delimiter = ',')
     for row in reader:
-        handle = row[0]
+        handle = row[2]
         word_dict[handle] = defaultdict(int)
         try:
             tweets = twitter_api.GetUserTimeline(screen_name=handle, count=200)
-            for tweet in tweets:
-                words = tweet.text.split(' ')
-                for word in words:
-                    if filter_word(word):
-                        word_dict[handle][normalize_word(word)]+=1
+            parsed_lang = " ".join(list(filter(lambda x: not x.startswith("@") and not x.startswith("http"), tweets[0].text.split(" "))))
+            detected_language = TextBlob(parsed_lang).detect_language()
+            if detected_language=="en" and handle in age_dict:
+                for tweet in tweets:
+                    words = tweet.text.split(' ')
+                    for word in words:
+                        if filter_word(word):
+                            word_dict[handle][normalize_word(word)]+=1
+            else:
+                print("not the right language: " + detected_language + " " + handle + ", "+ parsed_lang)
         except:
             print(handle)
 json = json.dumps(word_dict)
+print(len(word_dict))
 f = open("word_dict.json","w")
 f.write(json)
 f.close()
