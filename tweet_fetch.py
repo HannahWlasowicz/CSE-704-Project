@@ -34,22 +34,22 @@ twitter_api = twitter.Api(consumer_key=file_json["API_KEY"],
 
 
 age_dict = dict()
-with open("csv/updated_wiki_data.csv", mode='r') as wiki_csv:
+with open("csv/wiki_data.csv", mode='r') as wiki_csv:
     reader = csv.reader(wiki_csv, delimiter=',')
     for row in reader:
-        age = row[1]
-        handle = row[2]
+        age = row[2]
+        handle = row[3]
         age_dict[handle] = age
 
 word_dict = dict()
 with open("csv/wiki_data.csv", mode='r',) as csvfile:
     reader = csv.reader(csvfile, delimiter = ',')
     for row in reader:
-        handle = row[2]
+        handle = row[3]
         word_dict[handle] = defaultdict(int)
         try:
             tweets = twitter_api.GetUserTimeline(screen_name=handle, count=200)
-            parsed_lang = " ".join(list(filter(lambda x: not x.startswith("@") and not x.startswith("http"), tweets[0].text.split(" "))))
+            parsed_lang = " ".join(tweets[0].text.split(" "))
             detected_language = TextBlob(parsed_lang).detect_language()
             if detected_language=="en" and handle in age_dict:
                 for tweet in tweets:
